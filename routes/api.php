@@ -18,6 +18,10 @@ Route::post('login', 'App\Http\Controllers\API\UserController@login');
 Route::post('register', 'App\Http\Controllers\API\UserController@register');
 
 Route::group(['middleware' => 'auth:api'], function () {
+    Route::post('addFeedback', 'App\Http\Controllers\FeedbackController@store');
+    Route::post('addComment', 'App\Http\Controllers\CommentController@store');
+    Route::get('getFeedback', 'App\Http\Controllers\FeedbackController@index');
+
     Route::resource('items', 'App\Http\Controllers\ItemsController');
     Route::post(
         '/dynamic-items',

@@ -24,9 +24,9 @@ class UserController extends Controller
         ) {
 
             $user = Auth::user();
-            $success['token'] = $user->createToken('MyApp')->accessToken;
+            $user['token'] = $user->createToken('MyApp')->accessToken;
             return response()->json(
-                ['success' => $success],
+                ['success' => $user],
                 $this->successStatus
             );
         } else {
@@ -52,11 +52,20 @@ class UserController extends Controller
         }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-        $success['token'] = $user->createToken('MyApp')->accessToken;
-        $success['name'] = $user->name;
-        return response()->json(['success' => $success], $this->successStatus);
+        try {
+            $user = User::create($input);
+            $user['token'] = $user->createToken('MyApp')->accessToken;
+            return $user;
+
+
+        return response()->json(['response' => $user]);
     }
+    catch (\Throwable $th) {
+            return response()->json(['response' => 402]);
+            //throw $th;
+        }
+
+   }
     /**
      * details api
      *
